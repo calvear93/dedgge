@@ -112,7 +112,7 @@ public class Node extends Coordinate {
 		// If the node can't moves, it's blocked.
 		if( !ImageUtils.isAValidImageCoordinate( xf, yf, image.getWidth(), image.getHeight() ) || ImageUtils.withinRanges( yf, ranges ) )
 			return state == BLOCKED ? WASTE : BLOCKED;
-		if( imminentPixelDifference( image, xf, yf ) > resistance )
+		if( Math.abs( imminentPixelDifference( image, xf, yf ) ) > resistance )//)&& imminentPixelDifference( image, xf, yf ) > 0 )
 			return READY;
 		// Node will do a movement.
 		x = xf;
@@ -128,7 +128,8 @@ public class Node extends Coordinate {
 	 */
 	public int imminentPixelDifference( BufferedImage image, int xf, int yf ) {
 		// Difference between current pixel value and future pixel value by direction. 
-		return Math.abs( new Color( image.getRGB( x, y ) ).getBlue() - new Color( image.getRGB( xf, yf ) ).getBlue() );
+		//return Math.abs( new Color( image.getRGB( x, y ) ).getBlue() - new Color( image.getRGB( xf, yf ) ).getBlue() );
+		return new Color( image.getRGB( x, y ) ).getBlue() - new Color( image.getRGB( xf, yf ) ).getBlue();
 	}
 	
 	// Main execution method.

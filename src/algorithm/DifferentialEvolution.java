@@ -98,10 +98,10 @@ public class DifferentialEvolution {
 	 */
 	private void generateNet( int resistance ) {
 		nets.add( new Net(
-					Randomizer.randomFromExcept( 0, image.getHeight(), unavailableRanges ), // Row, random free position.
+					Randomizer.getGaussianExceptFrom( image.getHeight() / 2, image.getHeight() / 2 - ( float )( image.getHeight() * 0.1 ), 0, image.getHeight(), unavailableRanges ), // Row, random free position.
 					qnode, // Quantity of nodes.
 					hstep, // Horizontal step between nodes.
-					Randomizer.randomFrom( 90, 270 ), // Direction, maybe 90 (up) or 270 (down).
+					Randomizer.getFrom( 90, 270 ), // Direction, maybe 90 (up) or 270 (down).
 					resistance, // Resistance.
 					dispallow // Dispersion of thickness allowed.
 				) );
@@ -117,18 +117,18 @@ public class DifferentialEvolution {
 		}
 	}
 	
-	/** Generates the mutated (randomized) nets for the current generation.
+	/** Generates nets for the current generation.
 	 * @param quantity : int - Quantity of nodes.
 	 */
 	private void generate( int quantity ) {
-		generate( quantity, Randomizer.randomInt( pixeldiff[ 0 ], pixeldiff[ 1 ] ) );
+		generate( quantity, Randomizer.getInt( pixeldiff[ 0 ], pixeldiff[ 1 ] ) );
 	}
 	
 	/** Generates the mutated (randomized) nets for the current generation.
 	 * @param quantity : int - Quantity of nodes.
 	 */
 	private void generateMutations( int quantity ) {
-		generate( quantity, Randomizer.randomInt( 1, 255 ) );
+		generate( quantity, Randomizer.getInt( 1, 255 ) );
 	}
 	
 	/** Draws the nets in the image.
@@ -177,10 +177,10 @@ public class DifferentialEvolution {
 	public void run( int generations ) {
 		// Iterations for each generation.
 		int lifetime;
-		while( generations-- > 0 || nets.size() < 20 ) {
+		while( generations-- > 0 ) {//|| nets.size() < 20 ) {
 			// Calculate net specific features.
 			calculateNetFeatures( popdensity , ndensity );
-			lifetime = image.getHeight();
+			lifetime = ( int ) ( image.getHeight() * ( 1 - popdensity ) );
 			// Generates the new nets generation.
 			generate( ( int ) ( qnet * ( 1 - mutation ) ) );
 			generateMutations( ( int ) ( qnet * mutation ) );
