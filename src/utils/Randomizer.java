@@ -4,17 +4,17 @@ import java.util.Random;
 
 /** Utility class to get random structures.
  * @author Cristopher Alvear Candia.
- * @version 2.2
+ * @version 2.4
  */
 public class Randomizer {
 	
-	/** Random generator. */
+	/** Random generator object. */
 	private static Random randomizer = new Random();
 	
 	/** Private constructor. */
 	private Randomizer() {}
 	
-	/** Sets the sequence of the pseudo-random generation. 
+	/** Sets the seed of the pseudo-random sequence. 
 	 * @param seed : int - Seed of the pseudo-random sequence.
 	 */
 	public static void seed( int seed ) {
@@ -40,6 +40,7 @@ public class Randomizer {
 	}
 	
 	/** Returns a normally distributed random integer value. 
+	 * Approximately 70% of values will be between (mean - sdeviation, mean + sdeviation).
 	 * @param mean : int - Mean of the normal distribution.
 	 * @param sdeviation : int - Standard deviation of the normal distribution.
 	 * @return int - Normally distributed random value.
@@ -62,9 +63,9 @@ public class Randomizer {
 	 * @param ranges : int[][] - Matrix of limits.
 	 * @return int - Random value.
 	 */
-	public static int getIntExceptFrom( int lower, int upper, int[][] ranges ) {
+	public static int getIntExceptTheRanges( int lower, int upper, int[][] ranges ) {
 		int chosen = getInt( lower, upper );
-		return ImageUtils.withinRanges( chosen, ranges ) ? getIntExceptFrom( lower, upper, ranges ) : chosen;
+		return ImageUtils.withinRanges( chosen, ranges ) ? getIntExceptTheRanges( lower, upper, ranges ) : chosen;
 	}
 	
 	/** Returns a normally distributed random value excluding the ranges. 
@@ -75,9 +76,9 @@ public class Randomizer {
 	 * @param ranges : int[][] - Matrix of limits.
 	 * @return int - Random Gaussian value.
 	 */
-	public static int getGaussianExceptFrom( float mean, float sdeviation, int lower, int upper, int[][] ranges ) {
+	public static int getGaussianExceptTheRanges( float mean, float sdeviation, int lower, int upper, int[][] ranges ) {
 		int chosen = getGaussianInt( mean, sdeviation );
-		return ImageUtils.withinRanges( chosen, ranges ) || chosen < lower || chosen > upper ? getGaussianExceptFrom( mean, sdeviation, lower, upper, ranges ) : chosen;
+		return ImageUtils.withinRanges( chosen, ranges ) || chosen < lower || chosen > upper ? getGaussianExceptTheRanges( mean, sdeviation, lower, upper, ranges ) : chosen;
 	}
 	
 	/** Returns a random standard angle. 
@@ -85,6 +86,20 @@ public class Randomizer {
 	 */
 	public static int getAngle() {
 		return getInt( 0, 359 );
+	}
+	
+	/** Returns a random vertical standard angle (direction). 
+	 * @return int - Random angle. Maybe 90 (up) or 270 (down) degrees.
+	 */
+	public static int getVerticalDirection() {
+		return getFrom( 90, 207 );
+	}
+	
+	/** Returns a random horizontal standard angle (direction). 
+	 * @return int - Maybe 0 (left) or 180 (right) degrees.
+	 */
+	public static int getHorizontalDirection() {
+		return getFrom( 0, 180 );
 	}
 
 }

@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 
 /** Simulates a One Dimensional Movement Net, encapsulating edges by pixel differences.
  * @author Cristopher Alvear Candia.
- * @version 1.8
+ * @version 1.9
  */
 public class Net implements Comparable<Net> {
 
-	/** Header of the list. */
+	/** Header of the nodes list. */
 	private Node header;
 	/** Movement resistance threshold. Value between 0 and 255. */
 	private int resistance;
@@ -62,8 +62,8 @@ public class Net implements Comparable<Net> {
 
 	// Getters.
 
-	/** Returns the header of the net.
-	 * @return Node - Header of the net.
+	/** Returns the header of the nodes.
+	 * @return Node - Header of the nodes.
 	 */
 	public Node getHeader() {
 		return header;
@@ -157,7 +157,7 @@ public class Net implements Comparable<Net> {
 				continue;
 			// Executes the logic of the node.
 			node.run( image, ranges, resistance );
-			// If the node is LOCKED, death will come.
+			// If the node is WASTE, death will come.
 			if( node.getState() == Node.WASTE )
 				remove( node );
 		}

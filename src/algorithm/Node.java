@@ -13,7 +13,7 @@ import utils.ImageUtils;
  * 	[-1] BLOCKED : node is blocked by other node, it can be released in next iterations.
  * 	[-2] WASTE : node is blocked by other node or image edge permanently. It's waste and it will be removed from the net.
  * @author Cristopher Alvear Candia.
- * @version 2.2
+ * @version 2.3
  */
 public class Node extends Coordinate {
 	
@@ -103,7 +103,7 @@ public class Node extends Coordinate {
 	 * @param resistance : int - Resistance of movements of the net through image surface.
 	 * @return byte - State of the node.
 	 */
-	public byte advance( int distance, BufferedImage image, int[][] ranges, int resistance ) {
+	private byte advance( int distance, BufferedImage image, int[][] ranges, int resistance ) {
 		if( !ImageUtils.isAValidImageCoordinate( x, y, image.getWidth(), image.getHeight() ) )
 			return WASTE;
 		// Calculates grayscale value of futures (next adjacent) coordinates.
@@ -112,7 +112,7 @@ public class Node extends Coordinate {
 		// If the node can't moves, it's blocked.
 		if( !ImageUtils.isAValidImageCoordinate( xf, yf, image.getWidth(), image.getHeight() ) || ImageUtils.withinRanges( yf, ranges ) )
 			return state == BLOCKED ? WASTE : BLOCKED;
-		if( Math.abs( imminentPixelDifference( image, xf, yf ) ) > resistance )//)&& imminentPixelDifference( image, xf, yf ) > 0 )
+		if( Math.abs( imminentPixelDifference( image, xf, yf ) ) > resistance )
 			return READY;
 		// Node will do a movement.
 		x = xf;
@@ -126,7 +126,7 @@ public class Node extends Coordinate {
 	 * @param yf : int - Vertical future component.
 	 * @return int - Scalegray value difference.
 	 */
-	public int imminentPixelDifference( BufferedImage image, int xf, int yf ) {
+	private int imminentPixelDifference( BufferedImage image, int xf, int yf ) {
 		// Difference between current pixel value and future pixel value by direction. 
 		//return Math.abs( new Color( image.getRGB( x, y ) ).getBlue() - new Color( image.getRGB( xf, yf ) ).getBlue() );
 		return new Color( image.getRGB( x, y ) ).getBlue() - new Color( image.getRGB( xf, yf ) ).getBlue();

@@ -13,7 +13,7 @@ import algorithm.Node;
 
 /** Utility class to processing images.
  * @author Cristopher Alvear Candia.
- * @version 1.9
+ * @version 1.9.3
  */
 public class ImageUtils {
 	
@@ -242,7 +242,7 @@ public class ImageUtils {
 		// If steps value is low, quantity increases, 'cause more coordinates will generated.
 		int size;
 		ArrayList<Coordinate> coordinates = new ArrayList<>( size = ( int ) distanceBetweenCoordinates( c1, c2 ) + 1 );
-		// Gets origin coordinate and the direction to the other one. Could be upside down.
+		// Gets origin coordinate and the direction to the other one. (Could be upside down).
 		double x = c1.getX(), y = c1.getY(), direction = angleBetweenCoordinates( c1, c2 );
 		for( int k = 0; k < size; k++ ) {
 			// Calculation of the new coordinates by direction.
@@ -273,27 +273,16 @@ public class ImageUtils {
 	 */
 	public static int[] verticalDifferenceAnalysis( BufferedImage image ) {
 		int difference, max = 0, min = 255;
-		for( int y = 1; y < image.getHeight(); y++ ) {
-			difference = Math.abs( rowPixelValueAverage( image, y - 1 ) - rowPixelValueAverage( image, y ) );
-			max = max < difference ? difference : max;
-			min = min > difference ? difference : min;
-		}
+		for( int y = 1; y < image.getHeight(); y++ )
+			for( int x = 0; x < image.getWidth(); x++ ) {
+				difference = Math.abs( new Color( image.getRGB( x, y - 1 ) ).getBlue() - new Color( image.getRGB( x, y ) ).getBlue() );
+				max = max < difference ? difference : max;
+				min = min > difference ? difference : min;
+			}
 		return new int[]{ min, max };
 	}
 	
-	/** Calculates the pixel value average of the row.
-	 * @return BufferedImage - Image to will be analyzed.
-	 * @return y : int - Row (y coordinate).
-	 * @return int - Pixel value average of the row.
-	 */
-	private static int rowPixelValueAverage( BufferedImage image, int y ) {
-		int average = 0;
-		for( int x = 0; x < image.getWidth(); x++ )
-			average += new Color( image.getRGB( x, y ) ).getBlue();
-		return average / image.getWidth();
-	}
-	
-	// Draw utilities.
+	// Drawing utilities.
 	
 	/** Draws a net in the image.
 	 * @param image : BufferedImage - Image.
@@ -301,6 +290,7 @@ public class ImageUtils {
 	 * @param header : Node - Header node of the net.
 	 * @param nodeLevel : int - Thickness of the nodes drawing.
 	 * @param lineLevel : int - Thickness of the lines drawing.
+	 * @return Node - Next node to will be drawn.
 	 */	
 	public static Node drawNet( BufferedImage image, Color color, Node current, int nodeLevel, int lineLevel ) {
 		// Base case : if current node is null, finalizes the method.
@@ -350,7 +340,7 @@ public class ImageUtils {
 			image.setRGB( coordinate.getX(), coordinate.getY(), color.getRGB() );
 	}
 	
-	// Clone utility.
+	// Image cloning method.
 	
 	/** Clones a BufferedImage.
 	 * @param image : BufferedImage - Image to clone.
@@ -385,7 +375,7 @@ public class ImageUtils {
 		return binaryRangeSearch( array, value, lowest, middle );
 	}
 	
-	// Ranges calculus.
+	// Ranges calculation.
 	
 	/** Verifies if the number is within some range in the array.
 	 * @param value : int - Value.

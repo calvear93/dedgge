@@ -10,7 +10,7 @@ import utils.Randomizer;
 
 /** Generates and evolves multiple nodes as RNA into nets. 
  * @author Cristopher Alvear Candia.
- * @version 1.0
+ * @version 1.4
  */
 public class DifferentialEvolution {
 	
@@ -97,11 +97,12 @@ public class DifferentialEvolution {
 	 * @param resistance : int - Resistance of movements of the net through image surface.
 	 */
 	private void generateNet( int resistance ) {
+		float middle = image.getHeight() / 2;
 		nets.add( new Net(
-					Randomizer.getGaussianExceptFrom( image.getHeight() / 2, image.getHeight() / 2 - ( float )( image.getHeight() * 0.1 ), 0, image.getHeight(), unavailableRanges ), // Row, random free position.
+					Randomizer.getGaussianExceptTheRanges( middle, middle, 0, image.getHeight(), unavailableRanges ), // Row.
 					qnode, // Quantity of nodes.
 					hstep, // Horizontal step between nodes.
-					Randomizer.getFrom( 90, 270 ), // Direction, maybe 90 (up) or 270 (down).
+					Randomizer.getVerticalDirection(), // Direction, maybe 90 (up) or 270 (down).
 					resistance, // Resistance.
 					dispallow // Dispersion of thickness allowed.
 				) );
@@ -149,7 +150,7 @@ public class DifferentialEvolution {
 		// Sorts (descending) the nets by fitness. (Best fitness are at the end of the list).
 		Collections.sort( nets );
 		
-		// Index for to access at nets.
+		// Index for to access to the nets.
 		int i;
 		// Advances until to find first positive fitness value in the nets.
 		for( i = 0; i < nets.size() && nets.get( i ).fitness() < 0; i++ );
